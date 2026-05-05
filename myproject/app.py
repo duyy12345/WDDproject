@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import pymysql
 import jwt
@@ -73,7 +73,7 @@ def admin_required(f):
 # ─────────────────────────────────────────────
 @app.route('/')
 def home():
-    return "Flask Backend is running normally!"
+    return render_template('webUI.html')
 
 @app.route('/test-db')
 def test_db():
