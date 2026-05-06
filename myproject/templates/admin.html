@@ -2,32 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - BCE System</title>
+    <!-- External Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
-        .admin-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h2 { color: #1e40af; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
-
-        .instruction-box { background: #e0f2fe; border-left: 4px solid #0284c7; padding: 15px; margin-bottom: 25px; border-radius: 4px; color: #0369a1; }
-        .instruction-box h4 { margin-bottom: 8px; color: #075985; display: flex; align-items: center; gap: 8px; }
-        .instruction-box ul { margin-left: 20px; margin-top: 5px; font-size: 0.95rem; }
-        .instruction-box li { margin-bottom: 4px; }
-
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
-        input:focus, select:focus { border-color: #2563eb; outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-
-        .help-text { display: block; font-size: 0.85rem; color: #64748b; margin-top: 6px; font-style: italic; }
-
-        .btn-submit { background: #2563eb; color: white; border: none; padding: 14px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; transition: 0.3s; margin-top: 10px; }
-        .btn-submit:hover { background: #1d4ed8; }
-
-        #message { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; text-align: center; font-weight: 600; }
-        .success { background: #dcfce7; color: #166534; display: block !important; border: 1px solid #bbf7d0; }
-        .error-msg { background: #fee2e2; color: #991b1b; display: block !important; border: 1px solid #fecaca; }
-    </style>
+    <!-- Link to your CSS -->
+    <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
@@ -38,9 +18,9 @@
         <h4><i class="fas fa-info-circle"></i> Venue ID Reference Guide</h4>
         <p>The system is currently linked to the following 3 venues. Please enter the correct ID below:</p>
         <ul>
-            <li><strong>ID 1:</strong> Bristol O2 Academy <em>(Capacity: 2000)</em> - Best for music concerts.</li>
-            <li><strong>ID 2:</strong> Bristol Museum & Art Gallery <em>(Capacity: 500)</em> - Best for exhibitions and workshops.</li>
-            <li><strong>ID 3:</strong> Ashton Gate Stadium <em>(Capacity: 27000)</em> - Best for sports and large-scale events.</li>
+            <li><strong>ID 1:</strong> Bristol O2 Academy <em>(Capacity: 2000)</em></li>
+            <li><strong>ID 2:</strong> Bristol Museum & Art Gallery <em>(Capacity: 500)</em></li>
+            <li><strong>ID 3:</strong> Ashton Gate Stadium <em>(Capacity: 27000)</em></li>
         </ul>
     </div>
 
@@ -48,7 +28,7 @@
         <div class="form-group">
             <label>1. Event Title</label>
             <input type="text" id="title" placeholder="E.g., Bristol Summer Beer Festival" required>
-            <span class="help-text"><i class="fas fa-lightbulb"></i> Keep the title short and catchy to attract customers.</span>
+            <span class="help-text"><i class="fas fa-lightbulb"></i> Keep the title short and catchy.</span>
         </div>
 
         <div class="form-group">
@@ -59,7 +39,6 @@
                 <option value="Musical">Musical</option>
                 <option value="Sports">Sports</option>
             </select>
-            <span class="help-text"><i class="fas fa-filter"></i> Proper categorization helps customers easily find events on the homepage.</span>
         </div>
 
         <div class="form-group">
@@ -70,13 +49,11 @@
         <div class="form-group">
             <label>4. Venue ID</label>
             <input type="number" id="venue_id" placeholder="Enter 1, 2, or 3" min="1" max="3" required>
-            <span class="help-text"><i class="fas fa-exclamation-triangle" style="color: #d97706;"></i> Refer to the blue guide above to enter the correct ID. Invalid IDs will cause errors.</span>
         </div>
 
         <div class="form-group">
             <label>5. Base Price (£)</label>
             <input type="number" id="base_price" step="0.01" min="0" placeholder="E.g., 15.50" required>
-            <span class="help-text"><i class="fas fa-tag"></i> Enter <strong>0</strong> if this is a Free Entry event.</span>
         </div>
 
         <button type="submit" class="btn-submit"><i class="fas fa-cloud-upload-alt"></i> Upload to Database</button>
@@ -84,70 +61,12 @@
 
     <div id="message"></div>
     <br>
-    <a href="webUI.html" style="text-decoration: none; color: #475569; font-weight: 500; display: inline-block; margin-top: 10px;">
+    <a href="webUI.html" class="back-link">
         <i class="fas fa-arrow-left"></i> Back to Homepage
     </a>
 </div>
 
-<script>
-    // ── FIXED: Admin page guard ──
-    // Redirect to login if not logged in or not an admin
-    const token = localStorage.getItem('token');
-    const role  = localStorage.getItem('role');
-    if (!token || role !== 'admin') {
-        alert('Access denied. Admins only.');
-        window.location.href = 'webUI.html';
-    }
-
-    document.getElementById('add-event-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const eventData = {
-            title:      document.getElementById('title').value,
-            category:   document.getElementById('category').value,
-            start_date: document.getElementById('start_date').value,
-            venue_id:   parseInt(document.getElementById('venue_id').value),
-            base_price: parseFloat(document.getElementById('base_price').value)
-        };
-
-        const msgDiv = document.getElementById('message');
-        msgDiv.className = "";
-        msgDiv.innerText = "Processing...";
-        msgDiv.style.display = "block";
-
-        try {
-            // ── FIXED: Send JWT token in Authorization header ──
-            const response = await fetch('http://127.0.0.1:5000/api/admin/events/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify(eventData)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                msgDiv.innerHTML = '<i class="fas fa-check-circle"></i> Success! Event has been published to the homepage.';
-                msgDiv.className = "success";
-                document.getElementById('add-event-form').reset();
-            } else if (response.status === 401 || response.status === 403) {
-                // ── FIXED: Handle token expiry / unauthorized gracefully ──
-                msgDiv.innerHTML = '<i class="fas fa-lock"></i> Session expired. Please log in again.';
-                msgDiv.className = "error-msg";
-                setTimeout(() => { window.location.href = 'webUI.html'; }, 2000);
-            } else {
-                msgDiv.innerHTML = '<i class="fas fa-times-circle"></i> Error: ' + (result.error || "Failed to add event");
-                msgDiv.className = "error-msg";
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            msgDiv.innerHTML = '<i class="fas fa-wifi"></i> Connection Error: Please check if the Flask backend server is running!';
-            msgDiv.className = "error-msg";
-        }
-    });
-</script>
-
+<!-- Link to your JS -->
+<script src="admin.js"></script>
 </body>
 </html>
