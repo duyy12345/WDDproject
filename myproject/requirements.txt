@@ -1,0 +1,24 @@
+# Core Flask Dependencies
+Flask==3.0.3
+Flask-CORS==4.0.0
+
+# Database
+PyMySQL==1.1.1
+
+# Authentication & Security
+PyJWT==2.8.0
+Werkzeug==3.0.3
+
+# Environment Variables
+python-dotenv==1.0.1
+
+# Rate Limiting
+Flask-Limiter==3.5.0
+
+# Date/Time Utilities (already in stdlib, but explicit)
+# datetime, date, timedelta are built-in
+
+# Development/Production Extras (Recommended)
+# Flask-SQLAlchemy==3.1.1        # Optional: ORM
+# Flask-Migrate==4.0.7           # Optional: DB migrations
+# python-dateutil==2.8.2         # Optional: Advanced date parsing

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tickets - Bristol Events Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #b910b9;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        .logo i { margin-right: 8px; color: var(--accent); }
+
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-1px);
+        }
+
+        /* Event Info Card */
+        .event-info {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        .event-info h1 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .event-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        /* Booking Container */
+        .booking-container {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .booking-container h2 {
+            text-align: center;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .booking-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Date Selector */
+        .date-selector {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .date-selector:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .date-selector label {
+            display: block;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        #datePicker {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--white);
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        #datePicker:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Ticket Selector */
+        .ticket-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .ticket-selector label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        .ticket-selector input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .ticket-selector input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .ticket-selector input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+        }
+
+        .ticket-selector small {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        /* Price Breakdown */
+        .price-breakdown {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--success);
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .price-item:last-child {
+            margin-bottom: 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-top: 1px solid #bbf7d0;
+            padding-top: 0.75rem;
+        }
+
+        .price-label { color: var(--dark); }
+        .price-value { color: var(--success); font-weight: 600; }
+
+        /* Book Button */
+        .btn-book-now {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+            border: none;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-book-now:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-book-now:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* RESPONSIVE - 5 BREAKPOINTS */
+        @media (min-width: 1025px) {
+            .booking-container { max-width: 550px; padding: 3rem; }
+            .booking-container h2 { font-size: 2.2rem; }
+            body { padding: 2rem; }
+        }
+
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .booking-container { max-width: 90%; padding: 2.5rem; }
+            .booking-container h2 { font-size: 2rem; }
+        }
+
+        @media (max-width: 768px) and (min-width: 481px) {
+            body { padding: 1rem; }
+            .booking-container { max-width: 95%; padding: 2rem; margin: 1rem auto; }
+            .booking-container h2 { font-size: 1.8rem; }
+            .ticket-selector { grid-template-columns: 1fr; gap: 1.25rem; }
+            .event-meta { gap: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0.75rem; }
+            .header { padding: 1rem 2%; flex-direction: column; gap: 1rem; }
+            .booking-container { padding: 1.5rem; margin: 0.5rem; border-radius: 16px; }
+            .booking-container h2 { font-size: 1.5rem; margin-bottom: 1.25rem; }
+            .ticket-selector { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem; }
+            .date-selector, .price-breakdown { padding: 1.25rem; }
+            #datePicker { font-size: 0.95rem; padding: 0.875rem; }
+            .event-info { padding: 1.25rem; margin-bottom: 1rem; }
+            .event-info h1 { font-size: 1.5rem; }
+            .event-meta { flex-direction: column; gap: 0.75rem; }
+        }
+
+        @media (max-width: 360px) {
+            .booking-container { padding: 1.25rem; }
+            .booking-container h2 { font-size: 1.4rem; }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+
+        @media (prefers-contrast: high) {
+            .booking-container { border: 2px solid #000; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="webUI.html" class="logo">
+            <i class="fas fa-ticket-alt"></i> BCE
+        </a>
+        <a href="webUI.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Events
+        </a>
+    </header>
+
+    <main style="margin-top: 80px;">
+        <!-- Event Info (Dynamic) -->
+        <div class="event-info" id="eventInfo">
+            <h1 id="eventTitle">Bristol Summer Festival</h1>
+            <div class="event-meta">
+                <div class="meta-item">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="eventDate">Sat, 15 Jun 2024</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="eventVenue">O2 Academy Bristol</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="booking-container">
+            <h2><i class="fas fa-shopping-cart"></i> Complete Booking</h2>
+            
+            <form id="bookingForm" class="booking-form">
+                <div class="date-selector">
+                    <label for="datePicker">
+                        <i class="fas fa-calendar-alt"></i> Available Dates
+                    </label>
+                    <input type="date" id="datePicker" min="2024-06-01" required>
+                </div>
+                
+                <div class="ticket-selector">
+                    <label>
+                        Number of Tickets:
+                        <input type="number" id="numTickets" min="1" max="10" value="1">
+                    </label>
+                    <label>
+                        <input type="checkbox" id="studentDiscount">
+                        Student Discount (10% off)
+                        <small>*Bring student ID</small>
+                    </label>
+                </div>
+                
+                <div class="price-breakdown" id="priceBreakdown">
+                    <div class="price-item">
+                        <span class="price-label">Base Price (per ticket)</span>
+                        <span class="price-value" id="basePrice">£25.00</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Student Discount</span>
+                        <span class="price-value" id="discount">£0.00</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Total</span>
+                        <span class="price-value" id="totalPrice">£25.00</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-book-now" id="bookBtn">
+                    <i class="fas fa-credit-card"></i>
+                    Book Now £<span id="finalTotal">25.00</span>
+                </button>
+            </form>
+
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--success); margin-bottom: 1rem;"></i>
+                <h3>Booking Confirmed!</h3>
+                <p>Your tickets have been reserved. Check your email for confirmation.</p>
+                <a href="webUI.html" class="back-btn" style="margin-top: 1rem; display: inline-block; width: 100%; text-align: center;">
+                    <i class="fas fa-home"></i> Back to Events
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const STUDENT_DISCOUNT = 0.10;
+        let eventData = null;
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please login to book tickets!');
+                window.location.href = 'webUI.html';
+            }
+        }
+
+        // Get event ID from URL
+        function getEventId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('event');
+        }
+
+        // Load event details
+        async function loadEventDetails() {
+            const eventId = getEventId();
+            if (!eventId) {
+                console.error('No event specified in URL.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/events/${eventId}`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to load event details');
+                }
+
+                eventData = await response.json();
+                const eventDate = eventData.start_date.split('T')[0];
+
+                document.getElementById('eventTitle').textContent = eventData.title;
+                document.getElementById('eventDate').textContent = new Date(eventData.start_date).toLocaleDateString('en-GB');
+                document.getElementById('eventVenue').textContent = eventData.venue_name || 'TBA';
+                document.getElementById('datePicker').min = eventDate;
+                document.getElementById('datePicker').value = eventDate;
+                document.getElementById('basePrice').textContent = `£${eventData.base_price.toFixed(2)}`;
+                updatePrice();
+            } catch (error) {
+                console.error('Error loading event:', error);
+                document.getElementById('bookingForm').style.display = 'none';
+                document.getElementById('successMessage').classList.add('show');
+                document.querySelector('.success-message h3').textContent = 'Unable to load event';
+                document.querySelector('.success-message p').textContent = error.message;
+            }
+        }
+
+        // Dynamic price calculation
+        function updatePrice() {
+            if (!eventData) return;
+
+            const numTickets = parseInt(document.getElementById('numTickets').value) || 1;
+            const isStudent = document.getElementById('studentDiscount').checked;
+            const basePrice = eventData.current_price || eventData.base_price || 0;
+            const discountValue = isStudent ? basePrice * STUDENT_DISCOUNT * numTickets : 0;
+            const total = basePrice * numTickets - discountValue;
+
+            document.getElementById('basePrice').textContent = `£${basePrice.toFixed(2)}`;
+            document.getElementById('discount').textContent = isStudent ? `-£${discountValue.toFixed(2)}` : '£0.00';
+            document.getElementById('totalPrice').textContent = `£${total.toFixed(2)}`;
+            document.getElementById('finalTotal').textContent = total.toFixed(2);
+        }
+
+        async function submitBooking(e) {
+            e.preventDefault();
+            if (!eventData) return;
+
+            const token = localStorage.getItem('token');
+            const numTickets = parseInt(document.getElementById('numTickets').value) || 1;
+            const eventDate = document.getElementById('datePicker').value;
+            const isStudent = document.getElementById('studentDiscount').checked;
+
+            if (!eventDate) {
+                alert('Please select an event date.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/bookings/book`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        event_id: eventData.event_id,
+                        num_tickets: numTickets,
+                        event_date: eventDate,
+                        is_student: isStudent
+                    })
+                });
+
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.error || 'Booking failed');
+                }
+
+                document.getElementById('bookingForm').style.display = 'none';
+                const success = document.getElementById('successMessage');
+                success.querySelector('h3').textContent = 'Booking Confirmed!';
+                success.querySelector('p').textContent = 'Your booking is complete. Booking ID: ' + result.booking_id;
+                success.classList.add('show');
+            } catch (error) {
+                alert(error.message || 'Booking failed.');
+                console.error('Booking error:', error);
+            }
+        }
+
+        document.getElementById('numTickets').addEventListener('input', updatePrice);
+        document.getElementById('studentDiscount').addEventListener('change', updatePrice);
+        document.getElementById('datePicker').addEventListener('change', updatePrice);
+        document.getElementById('bookingForm').addEventListener('submit', submitBooking);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadEventDetails();
+        });
+    </script>
+</body>
+</html>

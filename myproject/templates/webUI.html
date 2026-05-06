@@ -307,7 +307,7 @@
                     }
                     showHome();
                 } else {
-                    document.getElementById('login-error').innerText = data.message || 'Login failed';
+                    document.getElementById('login-error').innerText = data.error || 'Login failed';
                 }
             } catch (error) {
                 console.error("Login error:", error);
@@ -338,13 +338,13 @@
         }
 
         function bookEvent(id, e) {
-            e.preventDefault(); 
+            e.preventDefault();
             if (!localStorage.getItem('token')) {
                 alert('Please login to book tickets!');
                 showLogin();
                 return;
             }
-            alert(`Proceeding to booking for Event ID: ${id}`);
+            window.location.href = `booking.html?event=${id}`;
         }
 
         // Initialize page
